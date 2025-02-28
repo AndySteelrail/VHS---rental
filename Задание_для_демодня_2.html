@@ -1,0 +1,558 @@
+<html>
+  <head>
+    <title>Муругов А.А. Задание для демодня-2</title>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        margin: 0;
+        color: #333333;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: rgba(61, 98, 129, 0.654);
+        background-image: url(https://i.postimg.cc/MG8yfygK/image.png);
+      }
+      ul {
+        margin: 0;
+        padding: 2px;
+        list-style-type: none;
+      }
+      li {
+        border-radius: 5px;
+        padding: 4px;
+        background-color: rgb(170 193 220);
+        display: grid;
+        grid-template-columns: 60% 40%;
+        grid-gap: 6px;
+        margin: 12px 2px;
+        transition: 0.2s;
+      }
+      li:hover {
+        background-color: rgb(127, 145, 167);
+      }
+      h2 {
+        color:black;
+        margin: 0;
+        padding: 8px;
+        text-align: center;
+        text-shadow: #000 1px 1px 0.1rem;
+      }
+      main {
+        grid-gap: 8px;
+        display: grid;
+        grid-template-columns: 4fr 3fr 3fr;
+      }
+      #total {
+        border-radius: 5px;
+        background-color: rgb(170 193 220);
+        margin: 12px 4px;
+        padding: 0 6px;
+      }
+      .name {
+        font-weight: bold;
+        color: black;
+      }
+      .description {
+        font-size: 0.9em;
+        font-style: italic;
+        padding: 4px;
+      }
+      button {
+        font-size: 0.7rem;
+      }
+      switch {
+        height: 500px;
+        width: 500px;
+        position: absolute;
+      }
+      header {
+        position: relative;
+        background-image: url(https://i.postimg.cc/xdJ15Syt/image.png);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        min-width: 100%;
+        min-height: 30%;
+      }
+      h1 {
+        text-align: center;
+        font-size: 2em;
+        color: #ff0083;
+        text-shadow: #000 2px 2px 0.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <button id="switch">Поменять каталог</button>
+      <h1>Прокат VHS</h1>
+      <h1>Распродажа конфиската</h1>
+    </header>
+    <main>
+      <section>
+        <h2>Каталог</h2>
+        <ul id="catalogue"></ul>
+      </section>
+      <section>
+        <h2>Избранное</h2>
+        <ul id="favorites"></ul>
+      </section>
+      <section>
+        <h2>Корзина</h2>
+        <ul id="basket"></ul>
+        <div id="total">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </section>
+    </main>
+    <script>
+      "use strict";
+      const testItems = [
+        {
+          id: 1,
+          name: "Кеды",
+          description: "Классные кеды",
+          price: 3200,
+          finalPrice: 2999,
+          amount: 1,
+        },
+        {
+          id: 2,
+          name: "Кроссовки",
+          description: "Крутые кроссовки",
+          price: 8500,
+          finalPrice: 7999,
+          amount: 5,
+        },
+        {
+          id: 3,
+          name: "Джинсы",
+          description: "Модные джинсы",
+          price: 10000,
+          finalPrice: 8599,
+          amount: 1,
+        },
+        {
+          id: 4,
+          name: "Худи",
+          description: "Молодёжное худи",
+          price: 5400,
+          finalPrice: 4899,
+          amount: 2,
+        },
+        {
+          id: 5,
+          name: "Свитшот",
+          description: "Стильный свитшот",
+          price: 4200,
+          finalPrice: 3399,
+          amount: 4,
+        },
+      ];
+      const myItems = [
+        {
+          id: 1,
+          name: "Большой босс",
+          description: "Брюс Ли, М.Йи, реж.Ло Вэй, 1971 г.",
+          price: 900,
+          finalPrice: 400,
+          amount: 3,
+        },
+        {
+          id: 2,
+          name: "Афера Томаса Крауна",
+          description: "П.Броснан, Р.Руссо, реж.Д.Мактрирнан, 1968 г.",
+          price: 600,
+          finalPrice: 600,
+          amount: 1,
+        },
+        {
+          id: 3,
+          name: "Коммандос",
+          description: "А.Шварценеггер, реж.М.Л.Лестер, 1985 г.",
+          price: 900,
+          finalPrice: 900,
+          amount: 2,
+        },
+        {
+          id: 4,
+          name: "Доспехи бога",
+          description: "Дж.Чан, А.Там, реж.Дж.Чан, 1986 г.",
+          price: 1000,
+          finalPrice: 1000,
+          amount: 0,
+        },
+        {
+          id: 5,
+          name: "Горец",
+          description: "К.Ламберт, Ш.Коннери, реж.Р.Малкэхи, 1986 г.",
+          price: 1000,
+          finalPrice: 1000,
+          amount: 0,
+        },
+        {
+          id: 6,
+          name: "Лучшее завтра II",
+          description: "Д.Шек, Т.Лунг, Л.Чунг, реж.Д.Ву, 1987 г.",
+          price: 600,
+          finalPrice: 400,
+          amount: 1,
+        },
+        {
+          id: 7,
+          name: "Кулак ярости",
+          description: "Брюс Ли, Н.Мяо, реж.Ло Вэй, 1972 г.",
+          price: 900,
+          finalPrice: 500,
+          amount: 3,
+        },
+        {
+          id: 8,
+          name: "Красная жара",
+          description: "А.Шварценеггер, Дж.Белуши, реж.У.Хилл, 1986 г.",
+          price: 1000,
+          finalPrice: 800,
+          amount: 4,
+        },
+        {
+          id: 9,
+          name: "Рука смерти",
+          description: "Д.Тан, Дж.Тьен, Дж.Чан, реж.Д.Ву, 1976 г.",
+          price: 1100,
+          finalPrice: 600,
+          amount: 1,
+        },
+        {
+          id: 10,
+          name: "Атлантик сити",
+          description: "Б.Ланкастер, реж.Л.Маль, 1980 г.",
+          price: 1200,
+          finalPrice: 600,
+          amount: 2,
+        },
+        {
+          id: 11,
+          name: "Сваренный вкрутую",
+          description: "Ч.Юн-Фат, Т.Мо, реж.Д.Ву, 1992 г.",
+          price: 800,
+          finalPrice: 800,
+          amount: 1,
+        },
+        {
+          id: 12,
+          name: "Харлей Дэвидсон и ковбой Мальборо",
+          description: "Д.Джонсон, М.Рурк, реж.С.Уинсер, 1991 г.",
+          price: 1000,
+          finalPrice: 1000,
+          amount: 2,
+        },
+      ];
+
+      class Product {
+        constructor({ id, name, description, price, finalPrice, amount }) {
+          this.id = id;
+          this.name = name;
+          this.description = description;
+          this.price = price;
+          this.finalPrice = finalPrice;
+          this.amount = amount;
+        }
+        getID() {
+          return this.id;
+        }
+        getName() {
+          return this.name;
+        }
+        getDescription() {
+          return this.description;
+        }
+        getPrice() {
+          return this.price;
+        }
+        getFinalPrice() {
+          return this.finalPrice;
+        }
+        getAmount() {
+          return this.amount;
+        }
+        shiftAmount(n) {
+          this.amount += n;
+        }
+        getDiscount() {
+          return this.price - this.finalPrice;
+        }
+      }
+
+      class Handler {
+        constructor(items) {
+          const catalogue = items.map(item => new Product(item));
+          this.state = {
+            catalogue,
+            favorites: [],
+            basket: []
+          };
+        }
+        setCatalogue(newItems) {
+          this.state.catalogue = newItems.map(item => new Product(item));
+        }
+        getItemByID(id) {
+          return this.state.catalogue.find((item) => item.getID() === id);
+        }
+        getBasketItemByID(id) {
+          return this.state.basket.find((item) => item.id === id);
+        }
+        getState() {
+          return this.state;
+        }
+
+        addToFavorites(id) {
+          if (!this.state.favorites.includes(id)) {
+            this.state.favorites.push(id);
+          }
+        }
+        removeFromFavorites(id) {
+          this.state.favorites = this.state.favorites.filter((e) => e !== id);
+        }
+        clearFavorites() {
+          this.state.favorites = [];
+        }
+
+        addToBasket(id) {
+          const product = this.getItemByID(id);
+          if (!product.getAmount()) return false;
+          product.shiftAmount(-1);
+
+          const basketItem = this.getBasketItemByID(id);
+          if (!basketItem) {
+            this.state.basket.push({ id, amount: 1 });
+          } else {
+            basketItem.amount++;
+          }
+          return true;
+        }
+        removeFromBasket(id) {
+          const index = this.state.basket.findIndex((item) => item.id === id);
+
+          const product = this.getItemByID(id);
+          product.shiftAmount(this.state.basket[index].amount);
+
+          this.state.basket.splice(index, 1);
+        }
+        clearBasket() {
+          for (const item of this.state.basket) {
+            this.getItemByID(item.id).shiftAmount(item.amount);
+          }
+          this.state.basket = [];
+        }
+        buyInBasket(id) {
+          const index = this.state.basket.findIndex((item) => item.id === id);
+          this.state.basket.splice(index, 1);
+        }
+
+        getTotal() {
+          let totalPrice = 0;
+          let totalFinalPrice = 0;
+          let totalDiscount = 0;
+
+          for (const {id, amount} of this.state.basket) {
+            const product = this.getItemByID(id);
+            totalPrice += product.getPrice() * amount;
+            totalFinalPrice += product.getFinalPrice() * amount;
+            totalDiscount += product.getDiscount() * amount;
+          }
+
+          return { totalPrice, totalFinalPrice, totalDiscount };
+        }
+      }
+
+      class Renderer {
+        constructor(handler) {
+          this.handler = handler;
+          this.state = handler.getState();
+          this.catalogueUl = document.getElementById("catalogue");
+          this.favoritesUl = document.getElementById("favorites");
+          this.basketUl = document.getElementById("basket");
+          this.totalDiv = document.getElementById("total");
+        }
+
+        render() {
+          this.renderCatalogue();
+          this.renderFavorites();
+          this.renderBasket();
+        }
+        renderCatalogue() {
+          this.catalogueUl.innerHTML = "";
+          for (const product of this.state.catalogue) {
+            const listItem = this.createCatalogueListItem(product);
+            this.catalogueUl.appendChild(listItem);
+          }
+        }
+        renderFavorites() {
+          this.favoritesUl.innerHTML = "";
+          for (const id of this.state.favorites) {
+            const product = this.handler.getItemByID(id);
+            const listItem = this.createFavoritesListItem(product);
+            this.favoritesUl.appendChild(listItem);
+          }
+        }
+        renderBasket() {
+          this.basketUl.innerHTML = "";
+          for (const {id, amount} of this.state.basket) {
+            const product = this.handler.getItemByID(id);
+            const listItem = this.createBasketListItem(product, amount);
+            this.basketUl.appendChild(listItem);
+          }
+
+          const {totalPrice, totalFinalPrice, totalDiscount} = 
+          this.handler.getTotal();
+          const [priceDiv, discountDiv] = this.totalDiv.children;
+
+          const isEmpty = this.state.basket.length === 0;
+          priceDiv.textContent = 
+          isEmpty ? "" : `Цена/со скидкой: ${totalPrice}/${totalFinalPrice}`;
+          discountDiv.textContent = isEmpty ? "" : "Экономия: " + totalDiscount;
+        }
+
+        createCatalogueListItem(product) {
+          return create("li", {},
+            create("div", {},
+              create("div", {},
+                create("span", {textContent: product.getName(), 
+                                className: "name"}),
+                create("div", {textContent: product.getDescription(),
+                               className: "description"})
+              ),
+              create("div", {},
+                create("span", {textContent: "Цена: "}),
+                create("s", {textContent: product.getPrice()}),
+                create("span", {textContent: "/"}),
+                create("span", {textContent: product.getFinalPrice()})
+              )
+            ),
+            create("div", {},
+              create("div", {},
+                this.buttonAddToFavorites(product.getID()),
+                this.buttonAddToBasket(product.getID())),
+              create("div", {textContent: "На складе: " + product.amount})
+            )
+          );
+        }
+        createFavoritesListItem(product) {
+          return create("li", {},
+            create("div", {},
+              create("div", {},
+                create("span", {textContent: product.getName(),
+                                className: "name"}),
+                create("div", {textContent: product.getDescription(),
+                               className: "description"})
+              ),
+              create("div", {},
+                create("span", {textContent: "Цена: "}),
+                create("s", {textContent: product.getPrice()}),
+                create("span", {textContent: "/"}),
+                create("span", {textContent: product.getFinalPrice()})
+              )
+            ),
+            create("div", {},
+              this.buttonAddToBasket(product.getID()),
+              this.buttonRemoveFromFavorites(product.getID())
+            )
+          );
+        }
+        createBasketListItem(product, amount) {
+          return create("li", {},
+            create("div", {},
+              create("div", {},
+                create("span", {textContent: product.getName(),
+                                className: "name"}),
+                create("div", {textContent: product.getDescription(),
+                                className: "description"})
+              ),
+              create("div", {},
+                create("span", {textContent: "Цена: "}),
+                create("s", {textContent: product.getPrice()}),
+                create("span", {textContent: "/"}),
+                create("span", {textContent: product.getFinalPrice()})
+              )
+            ),
+            create("div", {},
+              this.buttonRemoveFromBasket(product.getID()),
+              this.buttonBuyFromBasket(product.getID()),
+              create("div", {textContent: "Всего: " + amount})
+            )
+          );
+        }
+
+        buttonAddToFavorites(id) {
+          const button = create("button", {textContent: "В избранное"});
+          button.addEventListener("click", () => {
+            const isInFavorites = this.state.favorites.includes(id);
+            if (isInFavorites) return alert("Товар уже добавлен в избранное");
+            this.handler.addToFavorites(id);
+            this.renderFavorites();
+          });
+          return button;
+        }
+        buttonAddToBasket(id) {
+          const button = create("button", {textContent: "В корзину"});
+          button.addEventListener("click", () => {
+            const succes = this.handler.addToBasket(id);
+            if (!succes) return alert("Товара временно нет на складе");
+            this.renderCatalogue();
+            this.renderBasket();
+          });
+          return button;
+        }
+        buttonRemoveFromFavorites(id) {
+          const button = create("button", {textContent: "Удалить"});
+          button.addEventListener("click", () => {
+            this.handler.removeFromFavorites(id);
+            this.renderFavorites();
+          });
+          return button;
+        }
+        buttonRemoveFromBasket(id) {
+          const button = create("button", {textContent: "Удалить"});
+          button.addEventListener("click", () => {
+            this.handler.removeFromBasket(id);
+            this.renderBasket();
+            this.renderCatalogue();
+          });
+          return button;
+        }
+        buttonBuyFromBasket(id) {
+          const button = create("button", {textContent: "Купить"});
+          button.addEventListener("click", () => {
+            this.handler.buyInBasket(id);
+            this.renderBasket();
+            this.renderCatalogue();
+          });
+          return button;
+        }
+      }
+
+      function create(type, props, ...children) {
+          const element = document.createElement(type);
+          for (const propName in props) {
+            element[propName] = props[propName];
+          }
+          element.append(...children);
+          return element;
+      }
+
+      const handler = new Handler(myItems);
+      const renderer = new Renderer(handler);
+      renderer.render();
+
+      const buttonSwitchItems = document.getElementById("switch");
+
+      let isOriginalCatalogue = true;
+      buttonSwitchItems.addEventListener("click", () => {
+        handler.setCatalogue(isOriginalCatalogue ? testItems : myItems);
+        isOriginalCatalogue = !isOriginalCatalogue;
+        handler.clearFavorites();
+        handler.clearBasket();
+        renderer.render();
+      });
+    </script>
+  </body>
+</html>
