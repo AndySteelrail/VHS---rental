@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Муругов А.А. Задание для демодня-1</title>
+    <meta charset="utf-8" />
+    <script>
+      "use strict";
+
+      function releaseImage(height, width) {
+        const buffer = new Uint8ClampedArray(width * height * 4);
+
+        for (let i = 0; i < height; i++) {
+          for (let j = 0; j < width; j++) {
+            const pos = (i * width + j) * 4;
+            const value = Math.random() * 256;
+            buffer[pos] = value;
+            buffer[pos + 1] = value;
+            buffer[pos + 2] = value;
+            buffer[pos + 3] = value;
+          }
+        }
+
+        const canvas = document.getElementById("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        const imageData = ctx.createImageData(width, height);
+        imageData.data.set(buffer);
+        ctx.putImageData(imageData, 0, 0);
+        setTimeout(() => {
+          releaseImage(height, width);
+        }, 100);
+      }
+    </script>
+  </head>
+  <body onLoad="releaseImage(800, 600);">
+    <style>
+      canvas {
+        width: 800px;
+        height: 600px;
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+      }
+    </style>
+    <div>
+      <canvas id="canvas"></canvas>
+    </div>
+  </body>
+</html>
